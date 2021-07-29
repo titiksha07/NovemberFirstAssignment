@@ -1,0 +1,100 @@
+<table mat-table [dataSource]="dataSource" class="mt-table">
+    <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+                (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()"
+            ></mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event ? toggleSelection(row) : null"
+                [checked]="selection.isSelected(row)"
+            ></mat-checkbox>
+        </td>
+      </ng-container>
+
+    <ng-container matColumnDef="dueDate">
+        <th mat-header-cell *matHeaderCellDef class= "all-font">Due Date</th>
+        <td mat-cell *matCellDef="let element">
+            <div class="centered all-font">
+                <span class="logo-space">
+                    <img *ngIf="element.PastDue"
+                        src = "../../assets//logos/overdue icon.svg"
+                        matTooltip="Payment Overdue"
+                        matTooltipClass="tooltip-style"
+                        matTooltipPosition="above"
+                    />
+                </span>
+                {{element.DueDate|date:'shortDate'}}
+            </div>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="supplierName">
+        <th mat-header-cell *matHeaderCellDef class= "all-font">Supplier name</th>
+        <td mat-cell class= "all-font" *matCellDef="let element">{{element.SupplierName}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="invoice">
+        <th mat-header-cell *matHeaderCellDef class= "all-font">Invoice</th>
+        <td mat-cell class= "all-font" *matCellDef="let element">{{element.InvoiceNumber}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="voucherNo">
+        <th mat-header-cell *matHeaderCellDef class= "all-font">Voucher no.</th>
+        <td mat-cell class= "all-font" *matCellDef="let element">{{element.VoucherNo}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef class= "all-font">Payment amount</th>
+        <td mat-cell class= "all-font" *matCellDef="let element">
+            {{element.CurrencyCode}} {{element.Amount}}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef class= "all-font">Status</th>
+        <td mat-cell *matCellDef="let element">
+            <ng-container  [ngSwitch]="element.status">
+
+                <img *ngSwitchCase="'Rejected'"
+                    class="img-icon"
+                    src="../../assets//logos/rejected icon.svg"
+                />
+                
+                <img *ngSwitchCase = "'Error'"
+                    class="img-icon" src="../../assets//logos/error icon.svg"
+                />
+                
+                <img *ngSwitchCase = "'Partial'"
+                    class="img-icon" src="../../assets//logos/partial icon.svg"
+                    matTooltip="1 partial payment registered on this invoice"
+                    matTooltipClass="tooltip-style"
+                    matTooltipPosition="above"
+                />
+
+                <img *ngSwitchCase = "'Registered'"
+                    class="img-icon" src="../../assets//logos/registered icon.svg"
+                />
+
+                <img *ngSwitchCase = "'New'"
+                    class="img-icon" src="../../assets//logos/new icon.svg"
+                />
+
+                <img *ngSwitchCase = "'PartialPend'"
+                    class="img-icon" src="../../assets//logos/partial pending approval icon.svg"
+                />
+
+            </ng-container>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        [class.error]="row.status ==='Error'"
+        [class.notSelected]="selection.isSelected(row)"
+    ></tr>
+</table>
