@@ -1,0 +1,13 @@
+<div class="container-body">
+  <div class="heading-font">November First</div>
+  <div class="heading-font">Open posts in e-conomic</div>
+  <div>
+    <img src="./../assets/logos/person icon.svg" class="head-img-icon"/>
+  </div>
+</div>
+<div class="table-body">
+  <app-material-table></app-material-table>
+</div>
+<footer class="footer-body">
+  <button class="btn-footer">Continue <span *ngIf="shared.selectionCount$ | async as num">{{num}}</span></button>
+</footer>
